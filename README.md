@@ -1,6 +1,6 @@
-##  Integración (Responsable: Líder de Integración – Grupo 5)
+##  Integración
 
-### 🔗 Ambientes
+###  Ambientes
 - Frontend: https://<url-frontend>
 - Backend: https://<url-backend>
 - Swagger General: https://<url-swagger>
