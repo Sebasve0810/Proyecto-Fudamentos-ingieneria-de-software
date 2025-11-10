@@ -1,53 +1,39 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
-import Loader from "../components/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setError } from "../store/uiSlice";
+import Loader from "../components/Loader.jsx";
 
 export default function BookDetail() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
-  const loading = useSelector((state) => state.ui.loading);
-  const dispatch = useDispatch();
-
-  async function fetchBook() {
-    try {
-      dispatch(setLoading(true));
-      const res = await api.get(`/libros/${id}`);
-      setBook(res.data);
-    } catch (e) {
-      dispatch(setError("No se pudo cargar el libro"));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchBook();
+    let cancel = false;
+    setLoading(true);
+    setError("");
+
+    api.get(`/books/${id}`)
+      .then((res) => !cancel && setBook(res.data))
+      .catch((e) => setError(e.message || "No se pudo cargar el libro"))
+      .finally(() => !cancel && setLoading(false));
+
+    return () => { cancel = true; };
   }, [id]);
 
-  if (loading || !book) return <Loader />;
+  if (loading) return <Loader />;
+  if (error) return <p style={{color:"crimson"}}>{error}</p>;
+  if (!book) return <p>No encontrado</p>;
 
   return (
-    <div>
-      <h1>{book.titulo}</h1>
+    <div style={{ padding: 16 }}>
+      <Link to="/">← Volver</Link>
+      <h1>{book.titulo || book.title}</h1>
       <p><b>Autor:</b> {book.autor}</p>
+      <p><b>ISBN:</b> {book.isbn}</p>
+      <p><b>Categoría:</b> {book.categoria?.nombre || book.categoria}</p>
       <p><b>Descripción:</b> {book.descripcion}</p>
-
-      <button onClick={async () => {
-        try {
-          await api.post("/prestamos", {
-            usuarioId: 1,
-            libroId: book.id
-          });
-          alert("Préstamo solicitado.");
-        } catch {
-          alert("Error al solicitar préstamo.");
-        }
-      }}>
-        Solicitar préstamo
-      </button>
     </div>
   );
 }
