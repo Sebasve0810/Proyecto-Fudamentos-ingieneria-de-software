@@ -1,3 +1,4 @@
+// src/pages/Catalog.jsx
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import Loader from "../components/Loader";
@@ -12,8 +13,10 @@ export default function Catalog() {
   const fetchBooks = async () => {
     try {
       const res = await api.get("/libros");
-      setBooks(res.data);
-      setFiltered(res.data);
+      setBooks(res.data || []);
+      setFiltered(res.data || []);
+    } catch (err) {
+      console.error("Error fetching books", err);
     } finally {
       setLoading(false);
     }
@@ -23,17 +26,19 @@ export default function Catalog() {
     fetchBooks();
   }, []);
 
+  function handleSearch(term) {
+    if (!term) return setFiltered(books);
+    const t = term.toLowerCase();
+    setFiltered(books.filter(b => (b.titulo || "").toLowerCase().includes(t) || (b.autor || "").toLowerCase().includes(t)));
+  }
+
   if (loading) return <Loader />;
 
   return (
     <div className="page">
       <h2>Catálogo de Libros</h2>
 
-      <SearchBar
-        placeholder="Buscar por título..."
-        data={books}
-        onFilter={setFiltered}
-      />
+      <SearchBar placeholder="Buscar por título o autor..." onSearch={handleSearch} />
 
       <div className="grid">
         {filtered.map((b) => (
@@ -43,4 +48,3 @@ export default function Catalog() {
     </div>
   );
 }
-
