@@ -1,36 +1,40 @@
-##  Integración
+# Sistema de Gestión de Biblioteca Digital – Frontend (Grupo 5)
 
-###  Ambientes
-- Frontend: https://<url-frontend>
-- Backend: https://<url-backend>
-- Swagger General: https://<url-swagger>
+Este repositorio contiene el frontend del Sistema de Gestión de Biblioteca Digital desarrollado en el curso **Fundamentos de Ingeniería de Software**.  
+El Grupo 5 es responsable de la **interfaz de usuario (UI)**, la **experiencia de usuario (UX)** y la **integración con las APIs** expuestas por los grupos de backend (G1–G4).
 
-###  Variables de entorno
-El proyecto usa las siguientes variables (ver `.env.example`):
+La aplicación está construida con:
 
-```
-VITE_API_BASE_URL=
-VITE_AUTH_URL=
-VITE_CATALOG_URL=
-VITE_LOANS_URL=
-```
+- React + Vite
+- React Router
+- Redux Toolkit
+- Axios
+- CSS responsivo
 
-###  Contratos API confirmados
-- **Login:** POST `/auth/login`
-- **Catálogo:** GET `/libros`
-- **Detalle:** GET `/libros/:id`
-- **Préstamo:** POST `/prestamos`
-- **Mis préstamos:** GET `/prestamos/usuario/:id`
+---
 
-###  Flujo mínimo E2E
-1. Login  
-2. Catálogo  
-3. Detalle libro  
-4. Solicitar préstamo  
-5. Mis préstamos
+## 1. Arquitectura general
 
-###  Estado actual de integración
-- Ambiente:  Activo /  Inestable /  Caído  
-- Contratos:  Estables /  Cambios pendientes  
-- Últimas actualizaciones:  
-- Bloqueos detectados:
+La estructura principal del proyecto es:
+
+```bash
+Proyecto-Fudamentos-ingieneria-de-software/
+├── .github/
+│   └── ISSUE_TEMPLATE/        # Plantillas para issues y PRs
+├── docs/
+│   ├── Integracion/           # Documentos de integración FE–BE
+│   ├── ambiente/              # Configuración de ambiente de integración
+│   └── postman/               # Colecciones Postman
+├── src/
+│   ├── components/            # Componentes reutilizables (BookCard, Loader, SearchBar, etc.)
+│   ├── pages/                 # Páginas de alto nivel (Catalog, BookDetail, etc.)
+│   ├── routes/                # Rutas protegidas y por rol (ProtectedRoute, RoleRoute)
+│   ├── services/              # Cliente Axios y llamadas a APIs
+│   ├── store/                 # Slices de Redux (authSlice, uiSlice)
+│   ├── App.jsx                # Composición principal de la aplicación
+│   └── main.jsx               # Punto de entrada ReactDOM
+├── .env.example               # Variables de entorno de ejemplo
+├── index.html
+├── package.json
+└── Entrega 1 Proyecto Grupo 5.docx
+
