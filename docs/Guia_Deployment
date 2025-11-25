@@ -1,0 +1,144 @@
+1. Requisitos Previos
+
+Antes de generar el build de producción, asegúrate de tener instalado:
+Software
+Node.js v18+ o v20+
+Verifica con:
+node -v
+npm v9+ o v10+
+Verifica con:
+npm -v
+Git (si vas a desplegar en hosting basado en repositorios)
+Servicios externos necesarios
+Backend desplegado y funcionando (Grupos 1–4)
+URLs definitivas de:
+Servicio de autenticación (Auth)
+Servicio de catálogo
+Servicio de préstamos
+Servicio de Swagger
+
+2. Configuración de Variables de Entorno
+
+En la raíz del proyecto encontrarás:
+.env.example
+Debes copiarlo y crear un .env real:
+cp .env.example .env
+Contenido del archivo .env
+(usar las URLs reales del backend)
+VITE_API_BASE_URL=https://backend/api
+VITE_AUTH_URL=https://backend/api/auth
+VITE_CATALOG_URL=https://backend/api/libros
+VITE_LOANS_URL=https://backend/api/prestamos
+Notas importantes
+En producción no se comitea el archivo .env
+Vite solo reconoce variables que comienzan con VITE_
+Si el hosting usa configuración propia (ej: Netlify, Vercel), deberás subir estas variables allá
+
+3. Generación del Build de Producción
+
+Con el proyecto correctamente configurado, ejecuta:
+npm run build
+Esto generará una carpeta:
+/dist
+que contiene el frontend optimizado, minificado y listo para ser desplegado.
+¿Qué incluye este build?
+Archivos CSS y JS minificados
+Eliminación de código muerto (tree shaking)
+Optimización de imágenes y assets
+Generación automática de rutas y chunks
+
+4. Opciones de Deployment
+
+Opción 1: Deploy en Vercel (Recomendado)
+Inicia sesión en https://vercel.com
+Importa el repositorio desde GitHub
+En Project Settings > Environment Variables agrega todas las variables:
+VITE_API_BASE_URL
+VITE_AUTH_URL
+VITE_CATALOG_URL
+VITE_LOANS_URL
+En Build Command confirma:
+npm run build
+En Output Directory coloca:
+dist
+Deploy automático.
+Vercel detectará que es un proyecto Vite y configurará todo.
+Opción 2: Deploy en Netlify
+Entra a https://netlify.com
+New Site → Import from GitHub
+Build command:
+npm run build
+Publish directory:
+dist
+En Site Settings → Environment Variables agregar las variables VITE_
+Deploy.
+Opción 3: Deploy Manual en un Servidor Propio (Nginx)
+Generar build:
+npm run build
+Copiar la carpeta dist/
+Subirla a tu servidor en:
+/var/www/biblioteca/
+Configurar Nginx:
+server {
+    listen 80;
+    server_name midominio.com;
+
+    root /var/www/biblioteca;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+}
+Reiniciar Nginx:
+sudo systemctl restart nginx
+
+5. Verificación Post-deploy
+
+Después de desplegar, validar lo siguiente:
+
+5.1. Acceso básico
+Ingresar al dominio y verificar que la app carga sin errores
+No debe aparecer pantalla en blanco (white screen)
+
+5.2. Rutas del frontend
+/login
+/catalogo
+/libro/ID
+/prestamos
+/perfil
+Todas deben funcionar sin recargar la página (SPA correcto).
+
+5.3. Consumo de APIs
+Validar:
+Login correcto
+Carga de catálogo
+Detalle del libro
+Préstamos del usuario
+
+5.4. Consola del navegador
+No debe haber:
+Errores de CORS
+Errores de 404
+Variables de entorno faltantes
+Uncaught TypeErrors
+
+6. Checklist Final del Deployment
+
+Ítem	Estado
+Variables VITE_ configuradas	☐
+Build generado correctamente	☐
+Hosting configurado	☐
+API endpoints funcionando	☐
+Pruebas FE→BE completadas	☐
+Sin errores en consola	☐
+SPA funcionando sin recargas	☐
+Responsive revisado	☐
+
+7. Recomendaciones Finales
+
+Si el backend no está disponible, mostrar mensajes amigables (“Servicio no disponible temporalmente”).
+En caso de error 401, redirigir al login.
+Mantener el archivo .env.example siempre actualizado.
+
+Usar npm run preview para revisar cómo se verá el build real.
