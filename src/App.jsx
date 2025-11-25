@@ -1,3 +1,6 @@
+import Catalog from "./pages/Catalog";
+import BookDetail from "./pages/BookDetail";
+
 <Routes>
   <Route path="/" element={<Catalog />} />
   <Route path="/libro/:id" element={<BookDetail />} />
