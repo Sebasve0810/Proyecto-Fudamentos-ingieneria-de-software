@@ -1,6 +1,23 @@
-import React from "react";
-import AppRoutes from "./routes/AppRoutes.jsx";
+<Routes>
+  <Route path="/" element={<Catalog />} />
+  <Route path="/libro/:id" element={<BookDetail />} />
 
-export default function App() {
-  return <AppRoutes />;
-}
+  <Route
+    path="/admin"
+    element={
+      <RequireRole role="bibliotecario">
+        <BibliotecarioDashboard />
+      </RequireRole>
+    }
+  />
+
+  <Route
+    path="/libros"
+    element={
+      <RequireRole role="bibliotecario">
+        <GestionLibros />
+      </RequireRole>
+    }
+  />
+</Routes>
+
