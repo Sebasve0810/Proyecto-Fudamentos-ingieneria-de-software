@@ -1,27 +1,33 @@
-// src/components/SearchBar.jsx
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function SearchBar({ onSearch, placeholder = "Buscar..." }) {
+export default function SearchBar({ onSearch, placeholder = "Buscar libros..." }) {
   const [term, setTerm] = useState("");
 
-  function handleSubmit(e) {
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setTerm(value);
+    if (onSearch) onSearch(value);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(term.trim());
-  }
+    if (onSearch) onSearch(term);
+  };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: 12 }}>
-      <input
-        type="text"
-        placeholder={placeholder}
-        value={term}
-        onChange={(e) => setTerm(e.target.value)}
-        style={{ padding: 8, width: "70%", marginRight: 8 }}
-      />
-      <button type="submit">Buscar</button>
-      <button type="button" onClick={() => { setTerm(""); onSearch(""); }} style={{ marginLeft: 8 }}>
-        Limpiar
-      </button>
+    <form onSubmit={handleSubmit} className="mb-4">
+      <div className="relative max-w-md">
+        <span className="absolute inset-y-0 left-3 flex items-center text-slate-400 text-sm">
+          🔍
+        </span>
+        <input
+          className="input pl-9"
+          type="text"
+          placeholder={placeholder}
+          value={term}
+          onChange={handleChange}
+        />
+      </div>
     </form>
   );
 }

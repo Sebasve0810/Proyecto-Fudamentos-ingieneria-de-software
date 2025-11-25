@@ -1,39 +1,55 @@
+import React from "react";
+
 export default function BookTable({ books, onEdit, onDelete }) {
   return (
-    <div className="overflow-x-auto bg-white rounded-2xl border">
+    <div className="overflow-x-auto bg-white rounded-2xl border mt-4">
       <table className="min-w-full text-sm">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500">
           <tr>
-            <th className="th">Título</th>
-            <th className="th">Autor</th>
-            <th className="th">Categoría</th>
-            <th className="th">Año</th>
-            <th className="th">Disp.</th>
-            <th className="th"></th>
+            <th className="px-4 py-3">Título</th>
+            <th className="px-4 py-3">Autor</th>
+            <th className="px-4 py-3">Categoría</th>
+            <th className="px-4 py-3">Año</th>
+            <th className="px-4 py-3">Disp.</th>
+            <th className="px-4 py-3 text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {books.map((b) => (
-            <tr key={b.id} className="border-t">
-              <td className="td">{b.titulo}</td>
-              <td className="td">{b.autor}</td>
-              <td className="td">{b.categoria}</td>
-              <td className="td">{b.anio}</td>
-              <td className="td">{(b.cantidad_disponible ?? b.cantidad_total)}/{b.cantidad_total}</td>
-              <td className="td text-right">
-                <button className="btn" onClick={() => onEdit(b)}>Editar</button>
-                <button className="btn danger ml-2" onClick={() => onDelete(b)}>Eliminar</button>
+            <tr key={b.id} className="border-t hover:bg-slate-50">
+              <td className="px-4 py-3">{b.titulo}</td>
+              <td className="px-4 py-3">{b.autor}</td>
+              <td className="px-4 py-3">{b.categoria}</td>
+              <td className="px-4 py-3">{b.anio}</td>
+              <td className="px-4 py-3">
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full ${
+                    b.disponible
+                      ? "bg-green-50 text-green-700"
+                      : "bg-red-50 text-red-700"
+                  }`}
+                >
+                  {b.disponible ? "Sí" : "No"}
+                </span>
+              </td>
+              <td className="px-4 py-3 text-right space-x-2">
+                <button
+                  className="text-xs px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-100"
+                  onClick={() => onEdit(b)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="text-xs px-3 py-1.5 rounded-xl border border-red-500 text-red-600 hover:bg-red-50"
+                  onClick={() => onDelete(b.id)}
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <style>{`
-        .th{ @apply text-left px-4 py-3 font-medium text-gray-600;}
-        .td{ @apply px-4 py-3;}
-        .btn{ @apply px-3 py-1.5 rounded-xl border;}
-        .btn.danger{ @apply border-red-600 text-red-600;}
-      `}</style>
     </div>
   );
 }
