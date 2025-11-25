@@ -1,23 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  isAuthenticated: true, // MOCK para demo. Reemplazar al integrar login real
-  user: { id: 1, nombre: "Bibliotecario Demo", rol: "bibliotecario" },
-  token: "demo-token"
-};
+const token = sessionStorage.getItem("token");
+const user = sessionStorage.getItem("user");
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: {
+    isAuthenticated: !!token,
+    token: token || null,
+    user: user ? JSON.parse(user) : null,
+  },
   reducers: {
-    setAuth(state, action) { Object.assign(state, action.payload); },
+    setAuth(state, action) {
+      state.isAuthenticated = true;
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+      sessionStorage.setItem("token", action.payload.token);
+      sessionStorage.setItem("user", JSON.stringify(action.payload.user));
+    },
     logout(state) {
       state.isAuthenticated = false;
-      state.user = null;
       state.token = null;
-      sessionStorage.removeItem("token");
-    }
-  }
+      state.user = null;
+      sessionStorage.clear();
+    },
+  },
 });
 
 export const { setAuth, logout } = authSlice.actions;
