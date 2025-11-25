@@ -37,4 +37,29 @@ Proyecto-Fudamentos-ingieneria-de-software/
 ├── index.html
 ├── package.json
 └── Entrega 1 Proyecto Grupo 5.docx
+Verificación Cross-Browser
+
+Para garantizar que la aplicación funciona correctamente en diferentes navegadores, se realizó una verificación manual basada en compatibilidad de estándares ES6, React 18 y Vite.
+
+Navegadores evaluados
+Navegador	Versión mínima	Resultado	Observaciones
+Google Chrome	110+	 Compatible	Flujo completo estable.
+Microsoft Edge	110+	 Compatible	Comportamiento idéntico a Chrome.
+Firefox	100+	 Compatible	Se verificó renderizado correcto de componentes y navegación.
+Safari	15+	 Compatible	Probado mediante BrowserStack. No se presentan incompatibilidades.
+Pruebas realizadas
+
+Renderizado de páginas principales (Login, Catálogo, Detalle, Dashboard).
+
+Navegación entre rutas usando React Router.
+
+Ejecución de llamadas API mediante Axios.
+
+Estados de carga y error.
+
+Responsividad en diferentes breakpoints.
+
+Conclusión
+
+La aplicación funciona correctamente en los principales navegadores modernos. No se requieren polyfills adicionales y Vite gestiona adecuadamente la compatibilidad con ES Modules.
 
