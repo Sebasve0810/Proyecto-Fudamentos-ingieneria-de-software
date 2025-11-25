@@ -1,24 +1,38 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import BooksPage from "./pages/BooksPage";
-import BookDetail from "./pages/BookDetail";
-import PrivateRoute from "./auth/PrivateRoute";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
-function App() {
+import BibliotecaPage from "./pages/BibliotecaPage";
+import GestionLibrosPage from "./pages/GestionLibrosPage";
+import LoginPage from "./pages/LoginPage";
+import RequireRole from "./auth/RequireRole";
+
+export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
 
-      <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/books" element={<BooksPage />} />
-        <Route path="/books/:id" element={<BookDetail />} />
-      </Route>
+          <Route
+            path="/"
+            element={
+              <RequireRole role="bibliotecario">
+                <BibliotecaPage />
+              </RequireRole>
+            }
+          />
 
-      <Route path="*" element={<div>404 Not Found</div>} />
-    </Routes>
+          <Route
+            path="/gestion-libros"
+            element={
+              <RequireRole role="bibliotecario">
+                <GestionLibrosPage />
+              </RequireRole>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
-
-export default App;
